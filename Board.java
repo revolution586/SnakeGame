@@ -24,8 +24,16 @@ public class Board extends JPanel implements ActionListener {
 	private final int RAND_POS = 29
 	private final int DELAY = 140;
 	
+	//The B_WIDTH and B_HEIGHT constants determine the size of the board.//
+	//The DOT_SIZE is the size of the apple and the dot of the snake//
+	//The ALL_DOTS constants defines the maximum number of possible dots on the board (900 = (300 * 300)/(10 * 10))//
+	//The RAND_POS constant is used to calculate a random position for an apple.//
+	//The DELAY constant determines the speed of the game//
+	
 	private final int x[] = new int[ALL DOTS];
 	private final int y[] = new int[ALL_DOTS];
+	
+	//These two arrays store the x and y coordinates of all joints of a snake.//
 	
 	private int dots;
 	private int apple_x;
@@ -70,6 +78,9 @@ public class Board extends JPanel implements ActionListener {
 		head = iih.getImage();
 	}
 	
+	//In the loadImages() method we get the images for the game.//
+	//The ImageIcon class is used for displaying PNG images.//
+	
 	private void initGame() {
 		
 		dots = 3;
@@ -84,6 +95,8 @@ public class Board extends JPanel implements ActionListener {
 		timer = new Timer(DELAY, this);
 		timer.start();
 	}
+	
+	//In the initGame() method we create the snake, randomly locate an apple on the board, and start the timer.//
 	
 	@Override
 	public void paintComponent(Graphics g) {
@@ -133,12 +146,24 @@ public class Board extends JPanel implements ActionListener {
 		}
 	}
 	
+	//If the apple collides with the head, we increase the number of joints of the snake.//
+	//We call the locateApple() method which randomly positions a new apple object.//
+	
+	//In the move() method we have the key algorithm of the game.//
+	//To understand it, look at how the snake is moving.//
+	//We control the head of the snake.//
+	//We can change its direction with the cursor keys.//
+	//The rest of the joints move one position up the chain.//
+	//The second joint moves where the first was, the third joint where the second was etc.//
+	
 	private void move() {
 		
 		for (int z = dots; z > 0; z--) {
 			x[z] = x[(z - 1)];
 			y[z] = y[(z - 1)];
 		}
+		
+		//This code moves the joints up the chain.//
 		
 		if (leftDirection) {
 			x[0] -= DOT_SIZE;
@@ -166,9 +191,13 @@ public class Board extends JPanel implements ActionListener {
 			}
 		}
 		
+		//If the snake hits one of its joints with its head the game is over.//
+		
 		if (y[0] >= B_HEIGHT) {
 			inGame = false;
 		}
+		
+		//The game is finished if the snake hits the bottom of the board//
 		
 		if (y[0] < 0) {
 			inGame = false;
